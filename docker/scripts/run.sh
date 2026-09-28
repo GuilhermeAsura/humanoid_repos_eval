@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# usage: docker/run.sh <holosoma|groot|groot-wbc|luckyrobots>
+# usage: docker/scripts/run.sh <holosoma|groot|groot-wbc|luckyrobots>
 # starts the repo container detached with gpu + x11; commands are run later via docker exec
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 NAME="${1:-holosoma}"
 
 case "${NAME}" in

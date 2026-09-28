@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# usage: docker/build.sh <base|holosoma|groot|luckyrobots|all> [extra docker build args]
+# usage: docker/scripts/build.sh <base|holosoma|groot|luckyrobots|all> [extra docker build args]
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 DOCKER_DIR="${ROOT_DIR}/docker"
 TARGET="${1:-all}"
 shift || true
