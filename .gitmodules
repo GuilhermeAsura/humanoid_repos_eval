@@ -13,3 +13,6 @@
 [submodule "externals/opensot_docker"]
 	path = externals/opensot_docker
 	url = https://github.com/hucebot/opensot_docker.git
+[submodule "externals/unitree_rl_gym"]
+	path = externals/unitree_rl_gym
+	url = https://github.com/unitreerobotics/unitree_rl_gym.git
