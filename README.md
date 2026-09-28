@@ -4,10 +4,11 @@ Zero-shot evaluation of open-source Unitree G1 locomotion stacks in MuJoCo. Each
 
 | repo | controller | status |
 |---|---|---|
-| [holosoma](https://github.com/amazon-far/holosoma) | RL (walk + whole-body tracking dance) | runs; sim below real time on a laptop CPU, so physics is lowered to 500 Hz |
-| [GR00T-WholeBodyControl](https://github.com/NVlabs/GR00T-WholeBodyControl) | RL legs + interpolated arms; MotionBricks (kinematic, generative) | runs |
-| [g1-manipulation-challenge](https://github.com/luckyrobots/g1-manipulation-challenge) | RL walker + right-arm reacher | runs |
-| [g1_locomotion](https://github.com/ioloizou/g1_locomotion) | linear MPC + whole-body inverse dynamics (ROS Noetic) | not built yet |
+| [holosoma](https://github.com/amazon-far/holosoma) | RL (walking + whole-body tracking for dancing) | Runs; simulation is below real time on a laptop CPU, so the physics frequency is reduced to 500 Hz |
+| [GR00T-WholeBodyControl](https://github.com/NVlabs/GR00T-WholeBodyControl) | RL legs + interpolated arms; MotionBricks (kinematic, generative) | Runs |
+| [g1-manipulation-challenge](https://github.com/luckyrobots/g1-manipulation-challenge) | RL walker + right-arm reacher | Runs |
+| [g1_locomotion](https://github.com/ioloizou/g1_locomotion) | Linear MPC + whole-body inverse dynamics (ROS Noetic) | Not built yet |
+| [unitree_rl_gym](https://github.com/unitreerobotics/unitree_rl_gym/tree/main) | RL locomotion framework for legged and humanoid robots | Runs |
 
 ## requirements
 
