@@ -1,0 +1,15 @@
+[submodule "externals/GR00T-WholeBodyControl"]
+	path = externals/GR00T-WholeBodyControl
+	url = https://github.com/NVlabs/GR00T-WholeBodyControl.git
+[submodule "externals/g1-manipulation-challenge"]
+	path = externals/g1-manipulation-challenge
+	url = https://github.com/luckyrobots/g1-manipulation-challenge.git
+[submodule "externals/g1_locomotion"]
+	path = externals/g1_locomotion
+	url = https://github.com/ioloizou/g1_locomotion.git
+[submodule "externals/holosoma"]
+	path = externals/holosoma
+	url = https://github.com/amazon-far/holosoma.git
+[submodule "externals/opensot_docker"]
+	path = externals/opensot_docker
+	url = https://github.com/hucebot/opensot_docker.git

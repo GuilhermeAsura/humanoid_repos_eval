@@ -1,0 +1,14 @@
+# workflow notes and agent files
+.claude
+.workflow
+.vscode/
+
+# temporary files
+*.log
+*.txt
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/
