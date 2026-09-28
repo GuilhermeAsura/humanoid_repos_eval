@@ -18,7 +18,7 @@ Zero-shot evaluation of open-source Unitree G1 locomotion stacks in MuJoCo. Each
 ## setup
 
 ```bash
-git clone --recurse-submodules <this repo>
+git clone --recurse-submodules https://github.com/GuilhermeAsura/humanoid_repos_eval.git
 just build                 # humanoid-base + holosoma, groot and luckyrobots images
 ```
 
