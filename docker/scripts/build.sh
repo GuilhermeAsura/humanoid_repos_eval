@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# usage: docker/scripts/build.sh <base|holosoma|groot|luckyrobots|all> [extra docker build args]
+# usage: docker/scripts/build.sh <base|holosoma|groot|luckyrobots|labrob|unitree-g1-control|all> [extra docker build args]
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -39,11 +39,27 @@ build_luckyrobots() {
         "${DOCKER_DIR}"
 }
 
+build_labrob() {
+    docker build "${USER_ARGS[@]}" "$@" \
+        -f "${DOCKER_DIR}/labrob.Dockerfile" \
+        -t humanoid-labrob:latest \
+        "${DOCKER_DIR}"
+}
+
+build_unitree_g1_control() {
+    docker build "${USER_ARGS[@]}" "$@" \
+        -f "${DOCKER_DIR}/unitree-g1-control.Dockerfile" \
+        -t humanoid-unitree-g1-control:latest \
+        "${DOCKER_DIR}"
+}
+
 case "${TARGET}" in
     base) build_base "$@" ;;
     holosoma) build_holosoma "$@" ;;
     groot) build_groot "$@" ;;
     luckyrobots) build_luckyrobots "$@" ;;
-    all) build_base "$@" && build_holosoma "$@" && build_groot "$@" && build_luckyrobots "$@" ;;
-    *) echo "unknown target: ${TARGET} (base|holosoma|groot|luckyrobots|all)" >&2; exit 1 ;;
+    labrob) build_labrob "$@" ;;
+    unitree-g1-control) build_unitree_g1_control "$@" ;;
+    all) build_base "$@" && build_holosoma "$@" && build_groot "$@" && build_luckyrobots "$@" && build_labrob "$@" && build_unitree_g1_control "$@" ;;
+    *) echo "unknown target: ${TARGET} (base|holosoma|groot|luckyrobots|labrob|unitree-g1-control|all)" >&2; exit 1 ;;
 esac

@@ -16,3 +16,18 @@
 [submodule "externals/unitree_rl_gym"]
 	path = externals/unitree_rl_gym
 	url = https://github.com/unitreerobotics/unitree_rl_gym.git
+[submodule "externals/wb_humanoid_mpc"]
+	path = externals/wb_humanoid_mpc
+	url = https://github.com/manumerous/wb_humanoid_mpc
+[submodule "externals/labrob_mujoco_environment"]
+	path = externals/labrob_mujoco_environment
+	url = https://github.com/matteogoddi/labrob_mujoco_environment
+[submodule "externals/unitree-g1-control"]
+	path = externals/unitree-g1-control
+	url = https://github.com/xiongy26/unitree-g1-control
+[submodule "externals/g1_stairs"]
+	path = externals/g1_stairs
+	url = https://github.com/MHC-CodeSmith/g1_stairs.git
+[submodule "externals/RoMoCo"]
+	path = externals/RoMoCo
+	url = https://github.com/min-dai/RoMoCo
