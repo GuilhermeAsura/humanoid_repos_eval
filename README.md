@@ -11,7 +11,7 @@ Zero-shot evaluation of open-source Unitree G1 locomotion stacks in MuJoCo. Each
 | [unitree_rl_gym](https://github.com/unitreerobotics/unitree_rl_gym/tree/main) | RL locomotion framework for legged and humanoid robots | Runs |
 | [wb_humanoid_mpc](https://github.com/manumerous/wb_humanoid_mpc) | Nonlinear whole-body/centroidal MPC via ocs2 (ROS 2 Jazzy) | Centroidal MPC runs well; whole-body dynamics MPC launches but thrashes instead of walking (likely missing real-time thread scheduling in the container, unconfirmed). First launch pays a one-time CppAD codegen cost (~30-40 min here, not the README's 5-15). See report |
 | [labrob_mujoco_environment](https://github.com/matteogoddi/labrob_mujoco_environment) | Offline footstep planner + IS-MPC (LIP) + whole-body QP, no RL/ROS (plain CMake/C++) | Walks stably on a fixed straight-line plan, pronounced pendulum-like side-to-side sway (expected for a LIP-based gait). Push recovery tested and doesn't work: any scripted external force, down to a light 8N nudge, destabilizes the controller into a physics-breaking NaN rather than a fall or recovery — footstep correction for disturbances is an unimplemented TODO upstream. Needed mujoco/hpipm pinned to specific old versions/commits to match the code's API calls, not documented anywhere upstream. Also implements cooperative-carrying (hand admittance), untested. See report |
-| [RoMoCo](https://github.com/min-dai/RoMoCo) | Reduced-order planner (ALIP/H-LIP/MLIP/DCM) + whole-body TSC-QP, no RL (ROS 2 Humble) | Builds and runs; all 3 nodes (MuJoCo interface, controller, on-screen radio GUI) come up cleanly and the pinocchio model loads correctly. Not driven to an actual walk here — the sim starts paused by design (press Spacebar in the MuJoCo window to unpause, then use the on-screen GUI to send stand/walk), which looks like a stuck "waiting for proprioception" hang but isn't. Needed Pinocchio pinned to v3.9.0 (upstream's version pin was dead due to a Dockerfile comment silently swallowing it) and `CMAKE_PREFIX_PATH` re-exported for `docker exec`. See report |
+| [RoMoCo](https://github.com/min-dai/RoMoCo) | Reduced-order planner (ALIP/H-LIP/MLIP/DCM) + whole-body TSC-QP, no RL (ROS 2 Humble) | Walks: the scripted `romoco-sim-sync` demo transitions standing → forward walking and stays upright through the recorded clip (see Results below). The interactive `romoco-sim` + on-screen radio GUI path works too but was unreliable to drive by hand. Sim starts paused by design (press Spacebar in the MuJoCo window), which looks like a stuck "waiting for proprioception" hang but isn't. Needed Pinocchio pinned to v3.9.0 (upstream's version pin was dead due to a Dockerfile comment silently swallowing it) and `CMAKE_PREFIX_PATH` re-exported for `docker exec`. See report |
 | [mujoco_playground](https://github.com/google-deepmind/mujoco_playground) | RL training environment (JAX/PPO) | Runs |
 
 ## requirements
@@ -53,7 +53,8 @@ Start a container with `just up <name>` (`holosoma`, `groot`, `groot-wbc`, `luck
 | wb_humanoid_mpc centroidal (dummy) | `wb-mpc-build` (once) + `wb-mpc-centroidal-dummy` |
 | wb_humanoid_mpc whole-body (dummy) | `wb-mpc-build` (once) + `wb-mpc-wb-dummy` |
 | labrob_mujoco_environment walk | `labrob-build` (once) + `labrob-sim` |
-| RoMoCo G1 (needs Spacebar in the MuJoCo window to unpause, then the on-screen radio GUI for commands) | `romoco-image` (once) + `romoco-build` (once) + `romoco-sim` |
+| RoMoCo G1, interactive (Spacebar to unpause, then drive the on-screen radio GUI — fiddly, see report) | `romoco-image` (once) + `romoco-build` (once) + `romoco-sim` |
+| RoMoCo G1, scripted demo (Spacebar to unpause; no GUI, auto-walks on a fixed timeline, no manual control) | `romoco-image` (once) + `romoco-build` (once) + `romoco-sim-sync` |
 
 `just --list` shows every recipe with its key bindings. `just down <name>` stops a container.
 
@@ -145,6 +146,51 @@ just wb-mpc-wb-sim                  # whole-body dynamics MPC, full MuJoCo physi
 ![wb_humanoid_mpc demo](media/wb_humanoid_mpc.gif)
 
 *wb_humanoid_mpc demo recording.*
+
+#### RoMoCo
+
+**What it is:** `min-dai/RoMoCo`, a reduced-order-model locomotion stack for the G1 (also ships
+Cassie/H1 variants): a reduced-order planner (ALIP/H-LIP/MLIP/DCM, one active at a time) feeding a
+whole-body task-space QP controller (TSC-QP, IK, inverse dynamics). No RL. ROS 2 Humble, MuJoCo
+3.2.6, Pinocchio, Clarabel.cpp (a Rust QP solver) for the dynamics. GPL-3.0.
+
+**How it works:**
+- `romoco_planner` picks footstep placement every step from a reduced-order model of the robot —
+  ALIP and H-LIP (linear-inverted-pendulum variants that add the stance-foot angular momentum and a
+  closed-loop step-to-step velocity law), plus MLIP (flat-foot) and DCM as alternatives; only one is
+  active at a time.
+- `romoco_output` turns that footstep plan into whole-body output trajectories: CoM, swing-foot path
+  (Bezier curves in `romoco_utils`), torso orientation and arms.
+- `romoco_control` tracks those outputs with one of four methods, the main one being TSC-QP (a
+  task-space QP tracking CoM + torso orientation + swing foot + posture all at once); position IK,
+  velocity IK and inverse dynamics are the alternates.
+- `romoco_state_machine` gates Standing→Walking→Airborne transitions on the controller's own
+  readiness, not just the incoming command; `romoco_mujoco` is the sim interface. The MuJoCo window
+  itself starts paused (press Spacebar to run), independent of either control path.
+- Planning footstep placement directly, instead of forcing the CoM to track a ZMP preview the way
+  `labrob_mujoco_environment` and `unitree-g1-control` do, is why this gait is expected to show less
+  side-to-side pendulum sway than those two — reasoned from the code, not independently re-measured
+  against them here.
+
+**How to run it:**
+```bash
+just romoco-image                   # one-time: build the image (~1h+, builds Rust/Pinocchio/MuJoCo from source)
+just up romoco
+just romoco-build                   # one-time colcon build
+just romoco-sim-sync                # scripted demo, no GUI (used for the recording below)
+just romoco-sim                     # interactive: Spacebar to unpause, then drive the Qt GUI
+```
+
+**Strengths and limitations observed:**
+- The scripted demo walks: the robot stays upright, transitions
+  cleanly from standing to a forward gait after the velocity command, and visibly closes distance
+  toward the camera. The arms visibly swing during the walk rather than staying pinned to the sides, `romoco_output`/TSC-QP are tracking whole-body posture, not just legs.
+- TODO: push recovery and uneven-terrain handling weren't tested — the scripted demo has no
+  disturbance in its timeline, and no velocity-tracking numbers were taken either.
+
+![RoMoCo demo](media/romoco.gif)
+
+*RoMoCo demo recording (scripted `romoco-sim-sync` path, G1 transitions from standing to forward walking).*
 
 ### Training environment: 
 
