@@ -125,7 +125,10 @@ g1-control-serve port="8765":
 g1-control-check *args="":
     docker exec -it unitree-g1-control node scripts/sim_node.mjs {{args}}
 
-romoco_ros_env := "source /opt/ros/humble/setup.bash"
+# CMAKE_PREFIX_PATH is extended with /opt/openrobots (eigenpy, needed by pinocchio's cmake
+# config) only in the image's ~/.bashrc, which `docker exec bash -c` never sources; reexport
+# it here instead of patching the upstream Dockerfile
+romoco_ros_env := "source /opt/ros/humble/setup.bash && export CMAKE_PREFIX_PATH=/opt/openrobots:$CMAKE_PREFIX_PATH"
 
 # one-time: build the biped-sim image (colcon workspace is built later, inside the container);
 # not wired into docker/scripts/build.sh since, like g1-locomotion/wb-humanoid-mpc, this uses its
