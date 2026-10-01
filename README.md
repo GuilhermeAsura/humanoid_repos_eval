@@ -205,7 +205,7 @@ just mujoco-playground
 * No G1 walking policy was evaluated because the repository clone did not contain pretrained policy weights; no training was performed as part of this evaluation.
 * The Warp backend presented a compatibility issue with the versions used here, so the G1 tests were performed using JAX/MJX.
 
-![MuJoCo Playground](media/hg1_simulacao.gif)
+![MuJoCo Playground](media/g1_simulacao.gif)
 
 Sources:
 
