@@ -112,7 +112,7 @@ just groot-motionbricks  # keyboard-driven generative motion demo
 - TODO: GEAR-SONIC — the most capable component (full-body motion tracking, not just legs) — was not tried; its feasibility on this hardware is unmeasured, not just assumed heavy.
 
 <p align="center">
-  <img src="media/groot_motionbricks.gif" alt="GR00T MotionBricks demo">
+  <img src=".vids/groot_motionbricks.gif" alt="GR00T MotionBricks demo">
   <br>
   <em>MotionBricks demo recording (generative motion, no physics).</em>
 </p>
@@ -146,7 +146,7 @@ just wb-mpc-wb-sim                  # whole-body dynamics MPC, full MuJoCo physi
 - Heavy build: the container needs `NVIDIA_VISIBLE_DEVICES=all` set manually (its base image doesn't inherit it), a from-source Pinocchio v3.9.0 rebuild (the apt package resolves to 4.1.0, which breaks this repo's OCS2 fork), and the README's own recommendation of 16 GB RAM for a parallel build.
 
 <p align="center">
-  <img src="media/wb_humanoid_mpc.gif" alt="wb_humanoid_mpc demo">
+  <img src=".vids/wb_humanoid_mpc.gif" alt="wb_humanoid_mpc demo">
   <br>
   <em>wb_humanoid_mpc demo recording.</em>
 </p>
@@ -193,7 +193,7 @@ just romoco-sim                     # interactive: Spacebar to unpause, then dri
   disturbance in its timeline, and no velocity-tracking numbers were taken either.
 
 <p align="center">
-  <img src="media/romoco.gif" alt="RoMoCo demo">
+  <img src=".vids/romoco.gif" alt="RoMoCo demo">
   <br>
   <em>RoMoCo demo recording (scripted <code>romoco-sim-sync</code> path, G1 transitions from standing to forward walking).</em>
 </p>
@@ -228,7 +228,7 @@ just holosoma-dance        # terminal 2 alt: whole-body-tracking dance (m plays 
 - Actual policy training (the framework's core purpose) needs a strong GPU (IsaacSim/MuJoCo Warp want RTX) and was not exercised in this evaluation, which is zero-shot/inference-only by design; training is out of scope here.
 
 <p align="center">
-  <img src="media/holosoma.gif" alt="holosoma walk demo">
+  <img src=".vids/holosoma.gif" alt="holosoma walk demo">
   <br>
   <em>holosoma walk demo recording.</em>
 </p>
@@ -260,7 +260,7 @@ just mujoco-playground
 * The Warp backend presented a compatibility issue with the versions used here, so the G1 tests were performed using JAX/MJX.
 
 <p align="center">
-  <img src="media/g1_simulacao.gif" alt="MuJoCo Playground demo">
+  <img src=".vids/g1_simulacao.gif" alt="MuJoCo Playground demo">
 </p>
 
 Sources:
