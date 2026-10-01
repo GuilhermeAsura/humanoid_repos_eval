@@ -167,6 +167,32 @@ just holosoma-dance        # terminal 2 alt: whole-body-tracking dance (m plays 
 - The whole-body-tracking (dance) demo fell shortly after starting at the default rate; the most likely cause is the real-time mismatch above, but this is unconfirmed — TODO: re-test the dance demo at 500 Hz.
 - Actual policy training (the framework's core purpose) needs a strong GPU (IsaacSim/MuJoCo Warp want RTX) and was not exercised in this evaluation, which is zero-shot/inference-only by design; training is out of scope here.
 
+### MuJoCo Playground
+
+**What it is:** Google DeepMind's framework for robot learning built on MuJoCo/MJX, providing GPU-accelerated environments for training and evaluating RL policies across locomotion, manipulation and vision tasks. It supports JAX-based PPO training, domain randomization and sim-to-real workflows, with environments for robots including the Unitree G1.
+
+**How it works:**
+
+* Environments are implemented on top of MuJoCo/MJX and expose observations, actions, rewards and termination conditions through a JAX-compatible interface.
+* JAX enables JIT compilation and batched simulation, allowing many environments to run in parallel on the GPU during RL training.
+* PPO policies can be trained directly from the provided environments, with support for checkpoints, evaluation and domain randomization.
+* The framework supports both state-based and vision-based policies, making it suitable for locomotion as well as more general robot-learning tasks.
+* MuJoCo Playground provides both JAX and Warp simulation backends; JAX/MJX was used in this evaluation.
+
+**How to run it:**
+
+```bash
+just up mujoco-playground
+just mujoco-playground
+```
+
+**Strengths and limitations observed:**
+
+* The G1 environment, JAX GPU backend, reset/step interface and rendering all worked successfully.
+* The framework is particularly interesting for future RL training because simulation, JAX compilation and batched environments are designed around GPU-accelerated training.
+* No G1 walking policy was evaluated because the repository clone did not contain pretrained policy weights; no training was performed as part of this evaluation.
+* The Warp backend presented a compatibility issue with the versions used here, so the G1 tests were performed using JAX/MJX.
+
 
 Sources:
 
