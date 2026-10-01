@@ -31,3 +31,6 @@
 [submodule "externals/RoMoCo"]
 	path = externals/RoMoCo
 	url = https://github.com/min-dai/RoMoCo
+[submodule "externals/mujoco_playground"]
+path = externals/mujoco_playground
+url = https://github.com/google-deepmind/mujoco_playground.git
