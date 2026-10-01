@@ -110,6 +110,10 @@ just groot-motionbricks  # keyboard-driven generative motion demo
 - Setup friction is higher than the other two axis winners: Git LFS pointer files throughout the repo, a wrong ONNX policy filename in the standalone demo's config (worked around in `docker/groot/`), a hardcoded `cuda:0` in that same demo, and a 31 GB prebuilt image running as root for the full stack.
 - TODO: GEAR-SONIC — the most capable component (full-body motion tracking, not just legs) — was not tried; its feasibility on this hardware is unmeasured, not just assumed heavy.
 
+![GR00T MotionBricks demo](media/groot_motionbricks.gif)
+
+*MotionBricks demo recording (generative motion, no physics).*
+
 ### Model-based: 
 
 #### wb_humanoid_mpc
@@ -137,6 +141,10 @@ just wb-mpc-wb-sim                  # whole-body dynamics MPC, full MuJoCo physi
 - The whole-body dynamics MPC thrashes instead of walking, and this reproduces with full MuJoCo physics, not just in the kinematic-only dummy-sim. A real-time thread-priority warning (OCS2 requesting `SCHED_FIFO`, rejected for lack of `CAP_SYS_NICE`) is a plausible but unconfirmed cause — upstream's own README also calls this formulation less mature/documented than the centroidal one.
 - First-run autodiff codegen took ~30-40 minutes here, not the README's 5-15 minute estimate (one compiled library per contact/constraint frame) — not a hang, just slow, and paid again on every container recreation.
 - Heavy build: the container needs `NVIDIA_VISIBLE_DEVICES=all` set manually (its base image doesn't inherit it), a from-source Pinocchio v3.9.0 rebuild (the apt package resolves to 4.1.0, which breaks this repo's OCS2 fork), and the README's own recommendation of 16 GB RAM for a parallel build.
+
+![wb_humanoid_mpc demo](media/wb_humanoid_mpc.gif)
+
+*wb_humanoid_mpc demo recording.*
 
 ### Training environment: 
 
@@ -166,6 +174,10 @@ just holosoma-dance        # terminal 2 alt: whole-body-tracking dance (m plays 
 - The practical limit on this hardware is simulation real-time factor, not the policies: upstream's default 2000 Hz physics only reached ~0.3x real time, requiring the rate to be dropped to 500 Hz with `OMP_NUM_THREADS=1` to hold real time headless.
 - The whole-body-tracking (dance) demo fell shortly after starting at the default rate; the most likely cause is the real-time mismatch above, but this is unconfirmed — TODO: re-test the dance demo at 500 Hz.
 - Actual policy training (the framework's core purpose) needs a strong GPU (IsaacSim/MuJoCo Warp want RTX) and was not exercised in this evaluation, which is zero-shot/inference-only by design; training is out of scope here.
+
+![holosoma walk demo](media/holosoma.gif)
+
+*holosoma walk demo recording.*
 
 #### MuJoCo Playground
 

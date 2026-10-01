@@ -57,8 +57,10 @@ groot-wbc:
     docker exec -it groot-wbc bash -c '{{groot_wbc_env}} && python decoupled_wbc/control/main/teleop/run_g1_control_loop.py --simulator None'
 
 # motionbricks interactive demo (kinematic, no physics); wasd move, style keys in the readme
+# (runs through /opt/glue/run_motionbricks_demo.py, which loads the vqvae checkpoint with
+# torch.load(weights_only=False) -- needed since pytorch 2.6, see docker/groot/run_motionbricks_demo.py)
 groot-motionbricks:
-    docker exec -it -w /workspace/GR00T-WholeBodyControl/motionbricks groot /opt/venvs/motionbricks/bin/python scripts/interactive_demo_g1.py
+    docker exec -it -w /workspace/GR00T-WholeBodyControl/motionbricks groot /opt/venvs/motionbricks/bin/python /opt/glue/run_motionbricks_demo.py
 
 # pick & place scene with walker/reacher policies (keys in the mujoco window: arrows, ; ' turn, . walk/reach, , grip)
 luckyrobots-sim:
