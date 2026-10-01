@@ -167,7 +167,7 @@ just holosoma-dance        # terminal 2 alt: whole-body-tracking dance (m plays 
 - The whole-body-tracking (dance) demo fell shortly after starting at the default rate; the most likely cause is the real-time mismatch above, but this is unconfirmed — TODO: re-test the dance demo at 500 Hz.
 - Actual policy training (the framework's core purpose) needs a strong GPU (IsaacSim/MuJoCo Warp want RTX) and was not exercised in this evaluation, which is zero-shot/inference-only by design; training is out of scope here.
 
-### MuJoCo Playground
+#### MuJoCo Playground
 
 **What it is:** Google DeepMind's framework for robot learning built on MuJoCo/MJX, providing GPU-accelerated environments for training and evaluating RL policies across locomotion, manipulation and vision tasks. It supports JAX-based PPO training, domain randomization and sim-to-real workflows, with environments for robots including the Unitree G1.
 
